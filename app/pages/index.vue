@@ -10,12 +10,12 @@
       />
     </section>
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 sm:gap-16 mb-10">
-      <Trend title="Income" :amount="4000" :last-amount="3000" :loading="false" />
-      <Trend title="Expenses" :amount="2000" :last-amount="1500" :loading="false" />
-      <Trend title="Savings" :amount="1500" :last-amount="3000" :loading="false" />
-      <Trend title="Investments" :amount="3500" :last-amount="4000" :loading="false" />
+      <Trend title="Income" :amount="4000" :last-amount="3000" :loading="isLoading" />
+      <Trend title="Expenses" :amount="2000" :last-amount="1500" :loading="isLoading" />
+      <Trend title="Savings" :amount="1500" :last-amount="3000" :loading="isLoading" />
+      <Trend title="Investments" :amount="3500" :last-amount="4000" :loading="isLoading" />
     </section>
-    <section>
+    <section v-if="!isLoading">
       <div v-for="(transactionsOnDay, date) in transactionsGroupedByDate" :key="date" class="mb-10">
         <DailyTransactionSummary :transactions="transactionsOnDay" :date="date" />
 
@@ -23,25 +23,43 @@
           v-for="transaction in transactionsOnDay"
           :key="transaction.id"
           :transaction="transaction"
+          @deleted="refreshTransactions"
         />
       </div>
     </section>
+    <div v-else>
+      <USkeleton v-for="n in 4" :key="n" class="h-8 w-full mb-2" />
+    </div>
   </div>
 </template>
 
 <script setup>
 import { transactionViewOptions } from '~/constants.ts';
 const viewSelected = ref(transactionViewOptions[1]);
-
+const isLoading = ref(false);
 const supabase = useSupabaseClient();
+const transactions = ref([]);
 
-const { data: transactions, pending } = await useAsyncData('transactions', async () => {
-  const { data, error } = await supabase.from('transactions').select('*');
-  if (error) {
-    return [];
+const fetchTransactions = async () => {
+  isLoading.value = true;
+  try {
+    const { data, error } = await supabase.from('transactions').select('*');
+
+    if (error) {
+      return [];
+    }
+
+    return data;
+  } finally {
+    isLoading.value = false;
   }
-  return data;
-});
+};
+
+const refreshTransactions = async () => {
+  transactions.value = await fetchTransactions();
+};
+
+await refreshTransactions();
 
 const transactionsGroupedByDate = computed(() => {
   if (!transactions.value) return {};
