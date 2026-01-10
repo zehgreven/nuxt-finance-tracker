@@ -15,6 +15,12 @@
       <Trend title="Savings" :amount="1500" :last-amount="3000" :loading="false" />
       <Trend title="Investments" :amount="3500" :last-amount="4000" :loading="false" />
     </section>
+    <section>
+      <Transaction />
+      <Transaction />
+      <Transaction />
+      <Transaction />
+    </section>
   </div>
 </template>
 
