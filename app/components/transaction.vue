@@ -62,7 +62,6 @@ const iconColor = computed(() => {
 const { currency } = useCurrency(props.transaction.amount);
 
 const deleteTransaction = async () => {
-  console.log('Deleting transaction with id:', props.transaction.id);
   isLoading.value = true;
   const supabase = useSupabaseClient();
   const { error } = await supabase.from('transactions').delete().eq('id', props.transaction.id);
