@@ -52,7 +52,7 @@ const iconColor = computed(() => {
   return isIncome.value ? 'text-green-500' : 'text-red-500';
 });
 
-const { currency } = useCurrency(props.transaction.amount, 'pt-BR', 'BRL');
+const { currency } = useCurrency(props.transaction.amount);
 
 const items = ref([
   {

@@ -45,7 +45,7 @@ const icon = computed(() =>
   trendingUp.value ? 'i-heroicons-arrow-trending-up' : 'i-heroicons-arrow-trending-down',
 );
 
-const { currency } = useCurrency(props.amount, 'pt-BR', 'BRL');
+const { currency } = useCurrency(props.amount);
 
 const percentageChange = computed(() => {
   if (props.lastAmount === 0) return 0;
