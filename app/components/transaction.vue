@@ -5,10 +5,12 @@
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-1">
         <UIcon name="i-heroicons-arrow-up-right" class="w-6 h-6 mr-2 text-green-600" />
-        <div>Salary</div>
+        <div>{{ transaction.description }}</div>
       </div>
       <div>
-        <UBadge color="neutral" variant="outline">Category</UBadge>
+        <UBadge v-if="transaction.category" color="neutral" variant="outline">
+          {{ transaction.category }}
+        </UBadge>
       </div>
     </div>
     <div class="flex items-center justify-end gap-2">
@@ -33,7 +35,14 @@
 </template>
 
 <script setup>
-const { currency } = useCurrency(3000, 'pt-BR', 'BRL');
+const props = defineProps({
+  transaction: {
+    type: Object,
+    required: true,
+  },
+});
+
+const { currency } = useCurrency(props.transaction.amount, 'pt-BR', 'BRL');
 
 const items = ref([
   {
