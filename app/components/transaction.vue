@@ -4,7 +4,7 @@
   >
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-1">
-        <UIcon name="i-heroicons-arrow-up-right" class="w-6 h-6 mr-2 text-green-600" />
+        <UIcon :name="icon" class="w-6 h-6 mr-2" :class="iconColor" />
         <div>{{ transaction.description }}</div>
       </div>
       <div>
@@ -40,6 +40,16 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+});
+
+const isIncome = computed(() => props.transaction.type.toLowerCase() === 'income');
+
+const icon = computed(() => {
+  return isIncome.value ? 'i-heroicons-arrow-up-right' : 'i-heroicons-arrow-down-left';
+});
+
+const iconColor = computed(() => {
+  return isIncome.value ? 'text-green-500' : 'text-red-500';
 });
 
 const { currency } = useCurrency(props.transaction.amount, 'pt-BR', 'BRL');
