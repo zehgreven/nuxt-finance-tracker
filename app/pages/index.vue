@@ -57,7 +57,32 @@ import { transactionViewOptions } from '~/constants.ts';
 const viewSelected = ref(transactionViewOptions[1]);
 const isLoading = ref(false);
 const supabase = useSupabaseClient();
-const transactions = ref([]);
+
+const fetchTransactions = async () => {
+  isLoading.value = true;
+  try {
+    const { data, error } = await supabase.from('transactions').select('*');
+
+    if (error) {
+      return [];
+    }
+
+    return data;
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+const { data: transactions, refresh: refreshTransactions } = await useAsyncData(
+  'transactions',
+  async () => {
+    const { data, error } = await supabase.from('transactions').select('*');
+    if (error) {
+      return [];
+    }
+    return data;
+  },
+);
 
 const incomes = computed(() => {
   return transactions.value
@@ -80,27 +105,6 @@ const incomeTotal = computed(() => {
 const expenseTotal = computed(() => {
   return expenses.value.reduce((sum, t) => sum + t.amount, 0);
 });
-
-const fetchTransactions = async () => {
-  isLoading.value = true;
-  try {
-    const { data, error } = await supabase.from('transactions').select('*');
-
-    if (error) {
-      return [];
-    }
-
-    return data;
-  } finally {
-    isLoading.value = false;
-  }
-};
-
-const refreshTransactions = async () => {
-  transactions.value = await fetchTransactions();
-};
-
-await refreshTransactions();
 
 const transactionsGroupedByDate = computed(() => {
   if (!transactions.value) return {};
