@@ -11,7 +11,9 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "supabase:login": "npx supabase login",
+    "supabase:gen-types": "npx supabase gen types typescript --project-id befzilpfxhxqxqwdzyvu > ./app/types/database.types.ts"
   },
   "dependencies": {
     "@nuxt/ui": "^4.3.0",
@@ -22,6 +24,7 @@
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
   "devDependencies": {
     "@nuxt/eslint": "^1.12.1",
+    "@nuxtjs/supabase": "^2.0.3",
     "@nuxtjs/tailwindcss": "^6.14.0",
     "@tailwindcss/postcss": "^4.1.18",
     "eslint": "^9.39.2",
