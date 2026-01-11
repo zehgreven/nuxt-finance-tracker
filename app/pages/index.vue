@@ -18,7 +18,7 @@
         </div>
       </div>
       <div>
-        <UButton icon="i-heroicons-plus-circle" color="neutral" variant="outline" label="Add" />
+        <TransactionModal v-model="showModal" />
       </div>
     </section>
 
@@ -56,6 +56,7 @@
 import { transactionViewOptions } from '~/constants.ts';
 const viewSelected = ref(transactionViewOptions[1]);
 const isLoading = ref(false);
+const showModal = ref(false);
 const supabase = useSupabaseClient();
 
 const { data: transactions, refresh: refreshTransactions } = await useAsyncData(
