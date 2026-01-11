@@ -13,7 +13,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "supabase:login": "npx supabase login",
-    "supabase:gen-types": "npx supabase gen types typescript --project-id befzilpfxhxqxqwdzyvu > ./app/types/database.types.ts"
+    "supabase:gen-types": "npx supabase gen types typescript --project-id befzilpfxhxqxqwdzyvu > ./app/types/database.types.ts",
+    "seed": "node ./seed.mjs"
   },
   "dependencies": {
     "@nuxt/ui": "^4.3.0",
@@ -23,6 +24,7 @@
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
   "devDependencies": {
+    "@faker-js/faker": "^10.2.0",
     "@nuxt/eslint": "^1.12.1",
     "@nuxtjs/supabase": "^2.0.3",
     "@nuxtjs/tailwindcss": "^6.14.0",
@@ -30,6 +32,7 @@
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.7.4",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "zod": "^4.3.5"
   }
 }
