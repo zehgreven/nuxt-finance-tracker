@@ -84,7 +84,7 @@ const open = computed({
 });
 
 const supabase = useSupabaseClient();
-const toast = useToast();
+const toast = useAppToast();
 const form = ref(null);
 const isLoading = ref(false);
 
@@ -99,19 +99,13 @@ const save = async () => {
       throw error;
     }
 
-    toast.add({
-      title: 'Transaction saved',
-      icon: 'i-heroicons-check-circle',
-      color: 'success',
-    });
+    toast.success({ title: 'Transaction saved' });
     emit('saved');
     open.value = false;
   } catch (error) {
-    toast.add({
+    toast.error({
       title: 'Failed to save transaction',
       description: error.message,
-      icon: 'i-heroicons-exclamation-circle',
-      color: 'error',
     });
   } finally {
     isLoading.value = false;

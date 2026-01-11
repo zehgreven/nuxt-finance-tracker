@@ -48,10 +48,9 @@ useHead({
 });
 
 const supabase = useSupabaseClient();
-const toast = useToast();
+const toast = useTuseAppToastoast();
 const success = ref(false);
 const pending = ref(false);
-const form = ref(null);
 const initialState = {
   email: undefined,
 };
@@ -81,11 +80,9 @@ const handleLogin = async () => {
 
     success.value = true;
   } catch (error) {
-    toast.add({
+    toast.error({
       title: 'Failed to sign-in',
       description: error.message,
-      icon: 'i-heroicons-exclamation-circle',
-      color: 'error',
     });
   } finally {
     pending.value = false;
