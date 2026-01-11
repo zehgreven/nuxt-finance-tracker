@@ -3,7 +3,7 @@
     class="grid grid-cols-2 py-4 border-b border-gray-200 dark:border-gray-800 text-greay-900 dark:text-gray-100 last:border-0"
   >
     <div class="flex items-center justify-between">
-      <div class="flex items-center gap-1">
+      <div class="flex items-center gap-1 col-span-2">
         <UIcon :name="icon" class="w-6 h-6 mr-2" :class="iconColor" />
         <div>{{ transaction.description }}</div>
       </div>

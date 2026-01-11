@@ -18,7 +18,7 @@
         </div>
       </div>
       <div>
-        <TransactionModal v-model="showModal" />
+        <TransactionModal v-model="isModalOpen" @saved="refreshTransactions" />
       </div>
     </section>
 
@@ -56,13 +56,16 @@
 import { transactionViewOptions } from '~/constants.ts';
 const viewSelected = ref(transactionViewOptions[1]);
 const isLoading = ref(false);
-const showModal = ref(false);
+const isModalOpen = ref(false);
 const supabase = useSupabaseClient();
 
 const { data: transactions, refresh: refreshTransactions } = await useAsyncData(
   'transactions',
   async () => {
-    const { data, error } = await supabase.from('transactions').select('*');
+    const { data, error } = await supabase
+      .from('transactions')
+      .select('*')
+      .order('created_at', { ascending: false });
     if (error) {
       return [];
     }
