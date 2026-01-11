@@ -23,15 +23,34 @@
     </section>
 
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 sm:gap-16 mb-10">
-      <Trend title="Income" :amount="incomeTotal" :last-amount="3000" :loading="pending" />
-      <Trend title="Expenses" :amount="expenseTotal" :last-amount="1500" :loading="pending" />
+      <Trend
+        title="Income"
+        color="green"
+        :amount="incomeTotal"
+        :last-amount="3000"
+        :loading="pending"
+      />
+      <Trend
+        title="Expenses"
+        color="red"
+        :amount="expenseTotal"
+        :last-amount="1500"
+        :loading="pending"
+      />
       <Trend
         title="Savings"
+        color="green"
         :amount="incomeTotal - expenseTotal"
         :last-amount="3000"
         :loading="pending"
       />
-      <Trend title="Investments" :amount="3500" :last-amount="4000" :loading="pending" />
+      <Trend
+        title="Investments"
+        color="red"
+        :amount="3500"
+        :last-amount="4000"
+        :loading="pending"
+      />
     </section>
 
     <section v-if="!pending">
