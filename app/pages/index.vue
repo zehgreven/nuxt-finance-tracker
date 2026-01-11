@@ -88,12 +88,9 @@ const {
     expenseTotal,
     grouped: { byDate },
   },
-} = useFetchTransactions(current);
+} = await useFetchTransactions(current);
 
 const {
-  refresh: refreshPrevious,
   transactions: { incomeTotal: previousIncomeTotal, expenseTotal: previousExpenseTotal },
-} = useFetchTransactions(previous);
-
-await Promise.all([refresh(), refreshPrevious()]);
+} = await useFetchTransactions(previous);
 </script>
