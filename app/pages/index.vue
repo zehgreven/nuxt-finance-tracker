@@ -72,13 +72,14 @@
 </template>
 
 <script setup>
+import { transactionViewOptions } from '~/constants.ts';
+
 useHead({
   title: 'Finance Tracker',
 });
 
-import { transactionViewOptions } from '~/constants.ts';
-
-const selectedView = ref(transactionViewOptions[1]);
+const user = useSupabaseUser();
+const selectedView = ref(user.value.user_metadata?.transaction_view ?? transactionViewOptions[1]);
 const isModalOpen = ref(false);
 const { current, previous } = useSelectedTimePeriod(selectedView);
 
