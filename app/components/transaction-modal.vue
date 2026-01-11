@@ -1,70 +1,64 @@
 <template>
-  <UModal v-model:open="open" title="Add Transaction">
+  <UModal
+    v-model:open="open"
+    title="Add Transaction"
+    description="Fill in the details below to record a new transaction."
+  >
     <UButton icon="i-heroicons-plus-circle" color="neutral" variant="outline" label="Add" />
 
     <template #body>
-      <UModalContent>
-        <UModalBody>
-          <UForm ref="form" :state="state" :schema="schema" @submit="save">
-            <UFormField class="mb-4" label="Transaction Type" name="type" required>
-              <USelect
-                v-model="state.type"
-                class="w-full"
-                placeholder="Select the transaction type"
-                :items="types"
-                required
-              />
-            </UFormField>
+      <UForm ref="form" :state="state" :schema="schema" @submit="save">
+        <UFormField class="mb-4" label="Transaction Type" name="type" required>
+          <USelect
+            v-model="state.type"
+            class="w-full"
+            placeholder="Select the transaction type"
+            :items="types"
+            required
+          />
+        </UFormField>
 
-            <UFormField class="mb-4" label="Amount" name="amount" required>
-              <UInput
-                v-model.number="state.amount"
-                class="w-full"
-                type="number"
-                placeholder="Enter amount"
-                required
-              />
-            </UFormField>
+        <UFormField class="mb-4" label="Amount" name="amount" required>
+          <UInput
+            v-model.number="state.amount"
+            class="w-full"
+            type="number"
+            placeholder="Enter amount"
+            required
+          />
+        </UFormField>
 
-            <UFormField class="mb-4" label="Transaction Date" name="created_at" required>
-              <UInput
-                v-model="state.created_at"
-                class="w-full"
-                type="date"
-                icon="i-heroicons-calendar-days-20-solid"
-                required
-              />
-            </UFormField>
+        <UFormField class="mb-4" label="Transaction Date" name="created_at" required>
+          <UInput
+            v-model="state.created_at"
+            class="w-full"
+            type="date"
+            icon="i-heroicons-calendar-days-20-solid"
+            required
+          />
+        </UFormField>
 
-            <UFormField class="mb-4" label="Description" hint="Optional" name="description">
-              <UInput
-                v-model="state.description"
-                class="w-full"
-                type="text"
-                placeholder="Enter description"
-              />
-            </UFormField>
+        <UFormField class="mb-4" label="Description" hint="Optional" name="description">
+          <UInput
+            v-model="state.description"
+            class="w-full"
+            type="text"
+            placeholder="Enter description"
+          />
+        </UFormField>
 
-            <UFormField class="mb-4" label="Category" name="category" required>
-              <USelect
-                v-model="state.category"
-                class="w-full"
-                placeholder="Select the category"
-                :items="categories"
-                required
-              />
-            </UFormField>
+        <UFormField class="mb-4" label="Category" name="category" required>
+          <USelect
+            v-model="state.category"
+            class="w-full"
+            placeholder="Select the category"
+            :items="categories"
+            required
+          />
+        </UFormField>
 
-            <UButton
-              type="submit"
-              label="Save"
-              color="primary"
-              variant="solid"
-              :loading="isLoading"
-            />
-          </UForm>
-        </UModalBody>
-      </UModalContent>
+        <UButton type="submit" label="Save" color="primary" variant="solid" :loading="isLoading" />
+      </UForm>
     </template>
   </UModal>
 </template>
@@ -125,11 +119,11 @@ const save = async () => {
 };
 
 const initialState = {
-  type: 'Income',
-  amount: 10,
+  type: undefined,
+  amount: 0,
   created_at: new Date().toISOString().slice(0, 10),
-  description: 'teest',
-  category: 'Other',
+  description: undefined,
+  category: undefined,
 };
 
 const state = ref({ ...initialState });
