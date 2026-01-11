@@ -3,7 +3,7 @@
     <section class="flex items-center justify-between mb-10">
       <h1 class="text-4xl font-extrabold">Summary</h1>
       <USelectMenu
-        v-model="viewSelected"
+        v-model="selectedView"
         :items="transactionViewOptions"
         class="w-48"
         button-class="bg-white border border-gray-300 text-gray-700"
@@ -18,7 +18,7 @@
         </div>
       </div>
       <div>
-        <TransactionModal v-model="isModalOpen" @saved="refresh" />
+        <TransactionModal v-model="isModalOpen" @saved="refresh()" />
       </div>
     </section>
 
@@ -27,21 +27,21 @@
         title="Income"
         color="green"
         :amount="incomeTotal"
-        :last-amount="3000"
+        :last-amount="previousIncomeTotal"
         :loading="pending"
       />
       <Trend
         title="Expenses"
         color="red"
         :amount="expenseTotal"
-        :last-amount="1500"
+        :last-amount="previousExpenseTotal"
         :loading="pending"
       />
       <Trend
         title="Savings"
         color="green"
         :amount="incomeTotal - expenseTotal"
-        :last-amount="3000"
+        :last-amount="previousIncomeTotal - previousExpenseTotal"
         :loading="pending"
       />
       <Trend
@@ -61,7 +61,7 @@
           v-for="transaction in transactionsOnDay"
           :key="transaction.id"
           :transaction="transaction"
-          @deleted="refresh"
+          @deleted="refresh()"
         />
       </div>
     </section>
@@ -74,8 +74,9 @@
 <script setup>
 import { transactionViewOptions } from '~/constants.ts';
 
-const viewSelected = ref(transactionViewOptions[1]);
+const selectedView = ref(transactionViewOptions[1]);
 const isModalOpen = ref(false);
+const { current, previous } = useSelectedTimePeriod(selectedView);
 
 const {
   pending,
@@ -87,5 +88,12 @@ const {
     expenseTotal,
     grouped: { byDate },
   },
-} = await useFetchTransactions();
+} = useFetchTransactions(current);
+
+const {
+  refresh: refreshPrevious,
+  transactions: { incomeTotal: previousIncomeTotal, expenseTotal: previousExpenseTotal },
+} = useFetchTransactions(previous);
+
+await Promise.all([refresh(), refreshPrevious()]);
 </script>

@@ -1,31 +1,49 @@
-export const useFetchTransactions = async () => {
+export const useFetchTransactions = (period: any) => {
   const supabase = useSupabaseClient();
-
+  const transactions = ref([]);
   const pending = ref(false);
 
-  const incomes = computed(() => {
-    return transactions.value
-      ? transactions.value.filter(t => t.type.toLowerCase() === 'income')
-      : [];
-  });
+  const fetchTransactions = async () => {
+    pending.value = true;
+    try {
+      const { data } = await useAsyncData(
+        `transactions-${period.value.from.toDateString()}-${period.value.to.toDateString()}`,
+        async () => {
+          const { data, error } = await supabase
+            .from('transactions')
+            .select()
+            .gte('created_at', period.value.from.toISOString())
+            .lte('created_at', period.value.to.toISOString())
+            .order('created_at', { ascending: false });
 
-  const expenses = computed(() => {
-    return transactions.value
-      ? transactions.value.filter(t => t.type.toLowerCase() === 'expense')
-      : [];
-  });
+          if (error) return [];
 
-  const incomeCount = computed(() => incomes.value.length);
+          return data;
+        },
+      );
 
-  const expenseCount = computed(() => expenses.value.length);
+      return data.value;
+    } finally {
+      pending.value = false;
+    }
+  };
 
-  const incomeTotal = computed(() => {
-    return incomes.value.reduce((sum, t) => sum + t.amount, 0);
-  });
+  const income = computed(() => transactions.value.filter(t => t.type === 'Income'));
+  const expense = computed(() => transactions.value.filter(t => t.type === 'Expense'));
 
-  const expenseTotal = computed(() => {
-    return expenses.value.reduce((sum, t) => sum + t.amount, 0);
-  });
+  const incomeCount = computed(() => income.value.length);
+  const expenseCount = computed(() => expense.value.length);
+
+  const incomeTotal = computed(() =>
+    income.value.reduce((sum, transaction) => sum + transaction.amount, 0),
+  );
+  const expenseTotal = computed(() =>
+    expense.value.reduce((sum, transaction) => sum + transaction.amount, 0),
+  );
+
+  const refresh = async () => (transactions.value = await fetchTransactions());
+
+  watch(period, async () => await refresh());
 
   const transactionsGroupedByDate = computed(() => {
     if (!transactions.value) return {};
@@ -39,25 +57,14 @@ export const useFetchTransactions = async () => {
     }, {});
   });
 
-  const { data: transactions, refresh } = await useAsyncData('transactions', async () => {
-    const { data, error } = await supabase
-      .from('transactions')
-      .select('*')
-      .order('created_at', { ascending: false });
-    if (error) {
-      return [];
-    }
-    return data;
-  });
-
   return {
     transactions: {
       all: transactions,
       grouped: {
         byDate: transactionsGroupedByDate,
       },
-      incomes,
-      expenses,
+      income,
+      expense,
       incomeCount,
       expenseCount,
       incomeTotal,
