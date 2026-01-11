@@ -72,6 +72,10 @@
 </template>
 
 <script setup>
+useHead({
+  title: 'Finance Tracker',
+});
+
 import { transactionViewOptions } from '~/constants.ts';
 
 const selectedView = ref(transactionViewOptions[1]);
