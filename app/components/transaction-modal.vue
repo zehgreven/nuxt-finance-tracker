@@ -1,5 +1,5 @@
 <template>
-  <UModal v-model="open" title="Add Transaction">
+  <UModal v-model:open="open" title="Add Transaction">
     <UButton icon="i-heroicons-plus-circle" color="neutral" variant="outline" label="Add" />
 
     <template #body>
