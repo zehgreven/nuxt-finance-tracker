@@ -8,7 +8,14 @@
     <div>
       <USkeleton class="h-6 w-full" v-if="loading" />
       <div v-else class="flex gap-1 items-center text-sm">
-        <UIcon :name="icon" class="w-6 h-6" :class="{ green: trendingUp, red: !trendingUp }" />
+        <UIcon
+          :name="icon"
+          class="w-6 h-6"
+          :class="{
+            green: (color === 'green' && trendingUp) || (color === 'red' && !trendingUp),
+            red: (color === 'red' && trendingUp) || (color === 'green' && !trendingUp),
+          }"
+        />
         <div class="text-gray-500 dark:text-gray-400">{{ percentageChange }}% vs last period</div>
       </div>
     </div>
