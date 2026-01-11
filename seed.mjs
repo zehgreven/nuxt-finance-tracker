@@ -3,12 +3,17 @@ import { faker } from '@faker-js/faker';
 import 'dotenv/config';
 import { startOfMonth } from 'date-fns';
 
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY, {
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_PRIVATE_KEY, {
   auth: { persistSession: false },
 });
 const categories = ['Food', 'Housing', 'Car', 'Entertainment'];
 
-const createTransaction = (transactions, date) => {
+const {
+  data: { users },
+} = await supabase.auth.admin.listUsers();
+const userIds = users.map(user => user.id);
+
+const createTransaction = (transactions, userId, date) => {
   let type, category;
   const typeBias = Math.random();
 
@@ -42,7 +47,8 @@ const createTransaction = (transactions, date) => {
     amount,
     type,
     description: faker.lorem.sentence(),
-    category: type === 'Expense' ? category : null, // Category only for 'Expense'
+    category: type === 'Expense' ? category : null,
+    user_id: userId,
   });
 };
 
@@ -57,30 +63,35 @@ async function seedTransactions() {
 
   let transactions = [];
 
-  for (let i = 0; i < 50; i++) {
-    const date = new Date(
-      faker.date.between({ from: `2024-01-01T00:00:00.000Z`, to: new Date().toISOString() }),
+  for (const userId of userIds) {
+    for (let i = 0; i < 50; i++) {
+      const date = new Date(
+        faker.date.between({ from: `2024-01-01T00:00:00.000Z`, to: new Date().toISOString() }),
+      );
+
+      createTransaction(transactions, userId, date);
+    }
+
+    createTransaction(
+      transactions,
+      userId,
+      faker.date.between({ from: startOfMonth(new Date()), to: new Date().toISOString() }),
+    );
+    createTransaction(
+      transactions,
+      userId,
+      faker.date.between({ from: startOfMonth(new Date()), to: new Date().toISOString() }),
+    );
+    createTransaction(
+      transactions,
+      userId,
+      faker.date.between({ from: startOfMonth(new Date()), to: new Date().toISOString() }),
     );
 
-    createTransaction(transactions, date);
+    createTransaction(transactions, userId, new Date());
+    createTransaction(transactions, userId, new Date());
+    createTransaction(transactions, userId, new Date());
   }
-
-  createTransaction(
-    transactions,
-    faker.date.between({ from: startOfMonth(new Date()), to: new Date().toISOString() }),
-  );
-  createTransaction(
-    transactions,
-    faker.date.between({ from: startOfMonth(new Date()), to: new Date().toISOString() }),
-  );
-  createTransaction(
-    transactions,
-    faker.date.between({ from: startOfMonth(new Date()), to: new Date().toISOString() }),
-  );
-
-  createTransaction(transactions, new Date());
-  createTransaction(transactions, new Date());
-  createTransaction(transactions, new Date());
 
   const { error: insertError } = await supabase.from('transactions').upsert(transactions);
 
