@@ -18,6 +18,13 @@
         </div>
       </div>
       <div>
+        <UButton
+          icon="i-heroicons-plus-circle"
+          color="neutral"
+          variant="outline"
+          label="Add"
+          @click="isModalOpen = true"
+        />
         <TransactionModal v-model="isModalOpen" @saved="refresh()" />
       </div>
     </section>

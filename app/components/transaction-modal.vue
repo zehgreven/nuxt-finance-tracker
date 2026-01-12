@@ -4,8 +4,6 @@
     title="Add Transaction"
     description="Fill in the details below to record a new transaction."
   >
-    <UButton icon="i-heroicons-plus-circle" color="neutral" variant="outline" label="Add" />
-
     <template #body>
       <UForm ref="form" :state="state" :schema="schema" @submit="save">
         <UFormField class="mb-4" label="Transaction Type" name="type" required>
