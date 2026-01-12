@@ -29,6 +29,11 @@
             variant="ghost"
             :loading="isLoading"
           />
+          <TransactionModal
+            v-model="isModalOpen"
+            :transaction="transaction"
+            @saved="emit('edited')"
+          />
         </UDropdownMenu>
       </div>
     </div>
@@ -43,11 +48,10 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['deleted']);
-
 const toast = useAppToast();
-
+const isModalOpen = ref(false);
 const isLoading = ref(false);
+const emit = defineEmits(['deleted', 'edited']);
 
 const isIncome = computed(() => props.transaction.type.toLowerCase() === 'income');
 
@@ -79,7 +83,7 @@ const items = ref([
     label: 'Edit',
     icon: 'i-heroicons-pencil-square-20-solid',
     onSelect: () => {
-      console.log('Edit clicked');
+      isModalOpen.value = true;
     },
   },
   {

@@ -1,7 +1,7 @@
 <template>
   <UModal
     v-model:open="open"
-    title="Add Transaction"
+    :title="isEditing ? 'Edit Transaction' : 'New Transaction'"
     description="Fill in the details below to record a new transaction."
   >
     <template #body>
@@ -12,6 +12,7 @@
             class="w-full"
             placeholder="Select the transaction type"
             :items="types"
+            :disabled="isEditing"
             required
           />
         </UFormField>
@@ -70,7 +71,12 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  transaction: {
+    type: Object,
+    required: false,
+  },
 });
+const isEditing = computed(() => !!props.transaction);
 const emit = defineEmits(['update:modelValue', 'saved']);
 
 const open = computed({
@@ -91,7 +97,7 @@ const save = async () => {
     isLoading.value = true;
     const { error } = await supabase
       .from('transactions')
-      .upsert([{ ...state.value, amount: Number(state.value.amount) }]);
+      .upsert([{ ...state.value, amount: Number(state.value.amount), id: props.transaction?.id }]);
 
     if (error) {
       throw error;
@@ -118,7 +124,17 @@ const initialState = {
   category: undefined,
 };
 
-const state = ref({ ...initialState });
+const state = ref(
+  isEditing.value
+    ? {
+        type: props.transaction.type,
+        amount: props.transaction.amount,
+        description: props.transaction.description,
+        created_at: props.transaction.created_at.slice(0, 10),
+        category: props.transaction.category,
+      }
+    : { ...initialState },
+);
 
 const resetForm = () => {
   state.value = { ...initialState };
