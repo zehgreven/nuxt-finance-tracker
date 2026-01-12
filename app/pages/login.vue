@@ -48,7 +48,7 @@ useHead({
 });
 
 const supabase = useSupabaseClient();
-const toast = useTuseAppToastoast();
+const toast = useAppToast();
 const success = ref(false);
 const pending = ref(false);
 const initialState = {
