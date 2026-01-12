@@ -138,11 +138,7 @@ const state = ref(
 
 const resetForm = () => {
   state.value = { ...initialState };
-  try {
-    form.value?.clear();
-  } catch (e) {
-    // Silencioso: o componente já está fechando mesmo
-  }
+  form.value?.clear();
 };
 
 const schema = z.object({
