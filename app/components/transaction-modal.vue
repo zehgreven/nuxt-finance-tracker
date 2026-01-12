@@ -116,25 +116,23 @@ const save = async () => {
   }
 };
 
-const initialState = {
-  type: undefined,
-  amount: 0,
-  created_at: new Date().toISOString().slice(0, 10),
-  description: undefined,
-  category: undefined,
-};
+const initialState = isEditing.value
+  ? {
+      type: props.transaction.type,
+      amount: props.transaction.amount,
+      description: props.transaction.description,
+      created_at: props.transaction.created_at.slice(0, 10),
+      category: props.transaction.category,
+    }
+  : {
+      type: undefined,
+      amount: 0,
+      created_at: new Date().toISOString().slice(0, 10),
+      description: undefined,
+      category: undefined,
+    };
 
-const state = ref(
-  isEditing.value
-    ? {
-        type: props.transaction.type,
-        amount: props.transaction.amount,
-        description: props.transaction.description,
-        created_at: props.transaction.created_at.slice(0, 10),
-        category: props.transaction.category,
-      }
-    : { ...initialState },
-);
+const state = ref({ ...initialState });
 
 const resetForm = () => {
   state.value = { ...initialState };

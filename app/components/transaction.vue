@@ -32,7 +32,7 @@
           <TransactionModal
             v-model="isModalOpen"
             :transaction="transaction"
-            @saved="emit('edited')"
+            @saved="emit('updated')"
           />
         </UDropdownMenu>
       </div>
@@ -51,7 +51,7 @@ const props = defineProps({
 const toast = useAppToast();
 const isModalOpen = ref(false);
 const isLoading = ref(false);
-const emit = defineEmits(['deleted', 'edited']);
+const emit = defineEmits(['deleted', 'updated']);
 
 const isIncome = computed(() => props.transaction.type.toLowerCase() === 'income');
 

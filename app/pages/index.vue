@@ -69,6 +69,7 @@
           :key="transaction.id"
           :transaction="transaction"
           @deleted="refresh()"
+          @updated="refresh()"
         />
       </div>
     </section>
