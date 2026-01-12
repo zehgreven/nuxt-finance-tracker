@@ -15,12 +15,7 @@
           side: 'bottom',
         }"
       >
-        <UAvatar
-          size="sm"
-          src="https://avatars.githubusercontent.com/u/11966764?v=4"
-          alt="Avatar"
-          class="hover:cursor-pointer"
-        />
+        <UAvatar size="sm" :src="avatarUrl" alt="Avatar" class="hover:cursor-pointer" />
 
         <template #account="{ item }">
           <div class="text-left">
@@ -47,6 +42,9 @@
 <script setup>
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
+
+const { url: avatarUrl } = useAvatarUrl();
+
 const items = [
   [
     {

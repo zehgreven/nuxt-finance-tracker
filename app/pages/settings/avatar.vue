@@ -2,7 +2,7 @@
   <div>
     <div class="mb-4">
       <UFormField label="Current avatar" class="w-full" help="This would be blank by default">
-        <UAvatar src="https://avatars.githubusercontent.com/u/739984?v=4" size="3xl" />
+        <UAvatar :src="url" size="3xl" />
       </UFormField>
     </div>
 
@@ -63,6 +63,7 @@ const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 const toast = useAppToast();
 const uploading = ref(false);
+const { url } = useAvatarUrl();
 
 const formatBytes = (bytes: number, decimals = 2) => {
   if (bytes === 0) return '0 Bytes';
